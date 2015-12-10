@@ -17,9 +17,11 @@ TEST_CASE("uri::xxx()", "[uri.decompose]")
 {
     for (UriWithParts const& test : uri_tests)
     {
-        eggs::uri const uri(test.uri);
+        INFO("uri := " << test.uri.string());
 
-        SECTION("scheme")
+        eggs::uri const& uri = test.uri;
+
+        // scheme
         {
             if (test.parts.scheme != nullptr) {
                 CHECK(uri.scheme() == test.parts.scheme);
@@ -28,7 +30,7 @@ TEST_CASE("uri::xxx()", "[uri.decompose]")
             }
         }
 
-        SECTION("scheme-specific")
+        // scheme-specific
         {
             std::string scheme_specific;
             if (test.parts.authority != nullptr) {
@@ -44,7 +46,7 @@ TEST_CASE("uri::xxx()", "[uri.decompose]")
             CHECK(uri.scheme_specific() == scheme_specific);
         }
 
-        SECTION("authority")
+        // authority
         {
             if (test.parts.authority != nullptr) {
                 CHECK(uri.authority() == test.parts.authority);
@@ -53,14 +55,14 @@ TEST_CASE("uri::xxx()", "[uri.decompose]")
             }
         }
 
-        SECTION("path")
+        // path
         {
             REQUIRE(test.parts.path != nullptr);
 
             CHECK(uri.path() == test.parts.path);
         }
 
-        SECTION("query")
+        // query
         {
             if (test.parts.query != nullptr) {
                 CHECK(uri.query() == test.parts.query);
@@ -69,7 +71,7 @@ TEST_CASE("uri::xxx()", "[uri.decompose]")
             }
         }
 
-        SECTION("fragment")
+        // fragment
         {
             if (test.parts.fragment != nullptr) {
                 CHECK(uri.fragment() == test.parts.fragment);

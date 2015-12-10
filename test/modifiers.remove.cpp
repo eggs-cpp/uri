@@ -17,50 +17,66 @@ TEST_CASE("uri::remove_xxx()", "[uri.modifiers]")
 {
     for (UriWithParts const& test : uri_tests)
     {
-        eggs::uri uri(test.uri);
+        INFO("uri := " << test.uri.string());
 
-        SECTION("scheme")
+        // scheme
         {
+            eggs::uri uri = test.uri;
+
             uri.remove_scheme();
 
             CHECK(uri.has_scheme() == false);
+            CHECK(uri.scheme() == "");
             if (test.parts.scheme == nullptr) {
-                CHECK(uri.string() == test.uri);
+                CHECK(uri == test.uri);
             }
         }
 
-        SECTION("authority")
+        // authority
         {
+            eggs::uri uri = test.uri;
+
             uri.remove_authority();
 
             CHECK(uri.has_authority() == false);
+            CHECK(uri.authority() == "");
             if (test.parts.authority == nullptr) {
-                CHECK(uri.string() == test.uri);
+                CHECK(uri == test.uri);
             }
         }
 
-        SECTION("path")
+        // path
         {
+            eggs::uri uri = test.uri;
+
             uri.remove_path();
+
+            CHECK(uri.path() == "");
         }
 
-        SECTION("query")
+        // query
         {
+            eggs::uri uri = test.uri;
+
             uri.remove_query();
 
             CHECK(uri.has_query() == false);
+            CHECK(uri.query() == "");
             if (test.parts.query == nullptr) {
-                CHECK(uri.string() == test.uri);
+                CHECK(uri == test.uri);
             }
         }
 
-        SECTION("fragment")
+        // fragment
         {
+            eggs::uri uri = test.uri;
+
             uri.remove_fragment();
 
             CHECK(uri.has_fragment() == false);
+            CHECK(uri.fragment() == "");
             if (test.parts.fragment == nullptr) {
-                CHECK(uri.string() == test.uri);
+                CHECK(uri == test.uri);
             }
         }
     }

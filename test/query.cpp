@@ -17,9 +17,11 @@ TEST_CASE("uri::has_xxx()", "[uri.query]")
 {
     for (UriWithParts const& test : uri_tests)
     {
-        eggs::uri const uri(test.uri);
+        INFO("uri := " << test.uri.string());
 
-        SECTION("scheme")
+        eggs::uri const& uri = test.uri;
+
+        // scheme
         {
             if (test.parts.scheme != nullptr) {
                 CHECK(uri.has_scheme() == true);
@@ -28,7 +30,7 @@ TEST_CASE("uri::has_xxx()", "[uri.query]")
             }
         }
 
-        SECTION("authority")
+        // authority
         {
             if (test.parts.authority != nullptr) {
                 CHECK(uri.has_authority() == true);
@@ -37,7 +39,7 @@ TEST_CASE("uri::has_xxx()", "[uri.query]")
             }
         }
 
-        SECTION("query")
+        // query
         {
             if (test.parts.query != nullptr) {
                 CHECK(uri.has_query() == true);
@@ -46,7 +48,7 @@ TEST_CASE("uri::has_xxx()", "[uri.query]")
             }
         }
 
-        SECTION("fragment")
+        // fragment
         {
             if (test.parts.fragment != nullptr) {
                 CHECK(uri.has_fragment() == true);

@@ -5,8 +5,13 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef EGGS_URIS_TEST_URI_WITH_PARTS_HPP
+#define EGGS_URIS_TEST_URI_WITH_PARTS_HPP
+
+#include <eggs/uri.hpp>
+
 struct UriWithParts {
-    char const* uri;
+    eggs::uri uri;
     struct Parts {
         char const* scheme;
         char const* authority;
@@ -17,328 +22,330 @@ struct UriWithParts {
 };
 
 UriWithParts const uri_tests[] = {
-    { "",
+    { eggs::uri(""),
         { nullptr, nullptr, "", nullptr, nullptr }
     },
-    { "#",
+    { eggs::uri("#"),
         { nullptr, nullptr, "", nullptr, "" }
     },
-    { "#fragment",
+    { eggs::uri("#fragment"),
         { nullptr, nullptr, "", nullptr, "fragment" }
     },
-    { "?",
+    { eggs::uri("?"),
         { nullptr, nullptr, "", "", nullptr }
     },
-    { "?#",
+    { eggs::uri("?#"),
         { nullptr, nullptr, "", "", "" }
     },
-    { "?#fragment",
+    { eggs::uri("?#fragment"),
         { nullptr, nullptr, "", "", "fragment" }
     },
-    { "?query",
+    { eggs::uri("?query"),
         { nullptr, nullptr, "", "query", nullptr }
     },
-    { "?query#",
+    { eggs::uri("?query#"),
         { nullptr, nullptr, "", "query", "" }
     },
-    { "?query#fragment",
+    { eggs::uri("?query#fragment"),
         { nullptr, nullptr, "", "query", "fragment" }
     },
-    { "path",
+    { eggs::uri("path"),
         { nullptr, nullptr, "path", nullptr, nullptr }
     },
-    { "path#",
+    { eggs::uri("path#"),
         { nullptr, nullptr, "path", nullptr, "" }
     },
-    { "path#fragment",
+    { eggs::uri("path#fragment"),
         { nullptr, nullptr, "path", nullptr, "fragment" }
     },
-    { "path?",
+    { eggs::uri("path?"),
         { nullptr, nullptr, "path", "", nullptr }
     },
-    { "path?#",
+    { eggs::uri("path?#"),
         { nullptr, nullptr, "path", "", "" }
     },
-    { "path?#fragment",
+    { eggs::uri("path?#fragment"),
         { nullptr, nullptr, "path", "", "fragment" }
     },
-    { "path?query",
+    { eggs::uri("path?query"),
         { nullptr, nullptr, "path", "query", nullptr }
     },
-    { "path?query#",
+    { eggs::uri("path?query#"),
         { nullptr, nullptr, "path", "query", "" }
     },
-    { "path?query#fragment",
+    { eggs::uri("path?query#fragment"),
         { nullptr, nullptr, "path", "query", "fragment" }
     },
-    { "//",
+    { eggs::uri("//"),
         { nullptr, "", "", nullptr, nullptr }
     },
-    { "//#",
+    { eggs::uri("//#"),
         { nullptr, "", "", nullptr, "" }
     },
-    { "//#fragment",
+    { eggs::uri("//#fragment"),
         { nullptr, "", "", nullptr, "fragment" }
     },
-    { "//?",
+    { eggs::uri("//?"),
         { nullptr, "", "", "", nullptr }
     },
-    { "//?#",
+    { eggs::uri("//?#"),
         { nullptr, "", "", "", "" }
     },
-    { "//?#fragment",
+    { eggs::uri("//?#fragment"),
         { nullptr, "", "", "", "fragment" }
     },
-    { "//?query",
+    { eggs::uri("//?query"),
         { nullptr, "", "", "query", nullptr }
     },
-    { "//?query#",
+    { eggs::uri("//?query#"),
         { nullptr, "", "", "query", "" }
     },
-    { "//?query#fragment",
+    { eggs::uri("//?query#fragment"),
         { nullptr, "", "", "query", "fragment" }
     },
-    { "///path",
+    { eggs::uri("///path"),
         { nullptr, "", "/path", nullptr, nullptr }
     },
-    { "///path#",
+    { eggs::uri("///path#"),
         { nullptr, "", "/path", nullptr, "" }
     },
-    { "///path#fragment",
+    { eggs::uri("///path#fragment"),
         { nullptr, "", "/path", nullptr, "fragment" }
     },
-    { "///path?",
+    { eggs::uri("///path?"),
         { nullptr, "", "/path", "", nullptr }
     },
-    { "///path?#",
+    { eggs::uri("///path?#"),
         { nullptr, "", "/path", "", "" }
     },
-    { "///path?#fragment",
+    { eggs::uri("///path?#fragment"),
         { nullptr, "", "/path", "", "fragment" }
     },
-    { "///path?query",
+    { eggs::uri("///path?query"),
         { nullptr, "", "/path", "query", nullptr }
     },
-    { "///path?query#",
+    { eggs::uri("///path?query#"),
         { nullptr, "", "/path", "query", "" }
     },
-    { "///path?query#fragment",
+    { eggs::uri("///path?query#fragment"),
         { nullptr, "", "/path", "query", "fragment" }
     },
-    { "//authority",
+    { eggs::uri("//authority"),
         { nullptr, "authority", "", nullptr, nullptr }
     },
-    { "//authority#",
+    { eggs::uri("//authority#"),
         { nullptr, "authority", "", nullptr, "" }
     },
-    { "//authority#fragment",
+    { eggs::uri("//authority#fragment"),
         { nullptr, "authority", "", nullptr, "fragment" }
     },
-    { "//authority?",
+    { eggs::uri("//authority?"),
         { nullptr, "authority", "", "", nullptr }
     },
-    { "//authority?#",
+    { eggs::uri("//authority?#"),
         { nullptr, "authority", "", "", "" }
     },
-    { "//authority?#fragment",
+    { eggs::uri("//authority?#fragment"),
         { nullptr, "authority", "", "", "fragment" }
     },
-    { "//authority?query",
+    { eggs::uri("//authority?query"),
         { nullptr, "authority", "", "query", nullptr }
     },
-    { "//authority?query#",
+    { eggs::uri("//authority?query#"),
         { nullptr, "authority", "", "query", "" }
     },
-    { "//authority?query#fragment",
+    { eggs::uri("//authority?query#fragment"),
         { nullptr, "authority", "", "query", "fragment" }
     },
-    { "//authority/path",
+    { eggs::uri("//authority/path"),
         { nullptr, "authority", "/path", nullptr, nullptr }
     },
-    { "//authority/path#",
+    { eggs::uri("//authority/path#"),
         { nullptr, "authority", "/path", nullptr, "" }
     },
-    { "//authority/path#fragment",
+    { eggs::uri("//authority/path#fragment"),
         { nullptr, "authority", "/path", nullptr, "fragment" }
     },
-    { "//authority/path?",
+    { eggs::uri("//authority/path?"),
         { nullptr, "authority", "/path", "", nullptr }
     },
-    { "//authority/path?#",
+    { eggs::uri("//authority/path?#"),
         { nullptr, "authority", "/path", "", "" }
     },
-    { "//authority/path?#fragment",
+    { eggs::uri("//authority/path?#fragment"),
         { nullptr, "authority", "/path", "", "fragment" }
     },
-    { "//authority/path?query",
+    { eggs::uri("//authority/path?query"),
         { nullptr, "authority", "/path", "query", nullptr }
     },
-    { "//authority/path?query#",
+    { eggs::uri("//authority/path?query#"),
         { nullptr, "authority", "/path", "query", "" }
     },
-    { "//authority/path?query#fragment",
+    { eggs::uri("//authority/path?query#fragment"),
         { nullptr, "authority", "/path", "query", "fragment" }
     },
-    { "scheme:",
+    { eggs::uri("scheme:"),
         { "scheme", nullptr, "", nullptr, nullptr }
     },
-    { "scheme:#",
+    { eggs::uri("scheme:#"),
         { "scheme", nullptr, "", nullptr, "" }
     },
-    { "scheme:#fragment",
+    { eggs::uri("scheme:#fragment"),
         { "scheme", nullptr, "", nullptr, "fragment" }
     },
-    { "scheme:?",
+    { eggs::uri("scheme:?"),
         { "scheme", nullptr, "", "", nullptr }
     },
-    { "scheme:?#",
+    { eggs::uri("scheme:?#"),
         { "scheme", nullptr, "", "", "" }
     },
-    { "scheme:?#fragment",
+    { eggs::uri("scheme:?#fragment"),
         { "scheme", nullptr, "", "", "fragment" }
     },
-    { "scheme:?query",
+    { eggs::uri("scheme:?query"),
         { "scheme", nullptr, "", "query", nullptr }
     },
-    { "scheme:?query#",
+    { eggs::uri("scheme:?query#"),
         { "scheme", nullptr, "", "query", "" }
     },
-    { "scheme:?query#fragment",
+    { eggs::uri("scheme:?query#fragment"),
         { "scheme", nullptr, "", "query", "fragment" }
     },
-    { "scheme:path",
+    { eggs::uri("scheme:path"),
         { "scheme", nullptr, "path", nullptr, nullptr }
     },
-    { "scheme:path#",
+    { eggs::uri("scheme:path#"),
         { "scheme", nullptr, "path", nullptr, "" }
     },
-    { "scheme:path#fragment",
+    { eggs::uri("scheme:path#fragment"),
         { "scheme", nullptr, "path", nullptr, "fragment" }
     },
-    { "scheme:path?",
+    { eggs::uri("scheme:path?"),
         { "scheme", nullptr, "path", "", nullptr }
     },
-    { "scheme:path?#",
+    { eggs::uri("scheme:path?#"),
         { "scheme", nullptr, "path", "", "" }
     },
-    { "scheme:path?#fragment",
+    { eggs::uri("scheme:path?#fragment"),
         { "scheme", nullptr, "path", "", "fragment" }
     },
-    { "scheme:path?query",
+    { eggs::uri("scheme:path?query"),
         { "scheme", nullptr, "path", "query", nullptr }
     },
-    { "scheme:path?query#",
+    { eggs::uri("scheme:path?query#"),
         { "scheme", nullptr, "path", "query", "" }
     },
-    { "scheme:path?query#fragment",
+    { eggs::uri("scheme:path?query#fragment"),
         { "scheme", nullptr, "path", "query", "fragment" }
     },
-    { "scheme://",
+    { eggs::uri("scheme://"),
         { "scheme", "", "", nullptr, nullptr }
     },
-    { "scheme://#",
+    { eggs::uri("scheme://#"),
         { "scheme", "", "", nullptr, "" }
     },
-    { "scheme://#fragment",
+    { eggs::uri("scheme://#fragment"),
         { "scheme", "", "", nullptr, "fragment" }
     },
-    { "scheme://?",
+    { eggs::uri("scheme://?"),
         { "scheme", "", "", "", nullptr }
     },
-    { "scheme://?#",
+    { eggs::uri("scheme://?#"),
         { "scheme", "", "", "", "" }
     },
-    { "scheme://?#fragment",
+    { eggs::uri("scheme://?#fragment"),
         { "scheme", "", "", "", "fragment" }
     },
-    { "scheme://?query",
+    { eggs::uri("scheme://?query"),
         { "scheme", "", "", "query", nullptr }
     },
-    { "scheme://?query#",
+    { eggs::uri("scheme://?query#"),
         { "scheme", "", "", "query", "" }
     },
-    { "scheme://?query#fragment",
+    { eggs::uri("scheme://?query#fragment"),
         { "scheme", "", "", "query", "fragment" }
     },
-    { "scheme:///path",
+    { eggs::uri("scheme:///path"),
         { "scheme", "", "/path", nullptr, nullptr }
     },
-    { "scheme:///path#",
+    { eggs::uri("scheme:///path#"),
         { "scheme", "", "/path", nullptr, "" }
     },
-    { "scheme:///path#fragment",
+    { eggs::uri("scheme:///path#fragment"),
         { "scheme", "", "/path", nullptr, "fragment" }
     },
-    { "scheme:///path?",
+    { eggs::uri("scheme:///path?"),
         { "scheme", "", "/path", "", nullptr }
     },
-    { "scheme:///path?#",
+    { eggs::uri("scheme:///path?#"),
         { "scheme", "", "/path", "", "" }
     },
-    { "scheme:///path?#fragment",
+    { eggs::uri("scheme:///path?#fragment"),
         { "scheme", "", "/path", "", "fragment" }
     },
-    { "scheme:///path?query",
+    { eggs::uri("scheme:///path?query"),
         { "scheme", "", "/path", "query", nullptr }
     },
-    { "scheme:///path?query#",
+    { eggs::uri("scheme:///path?query#"),
         { "scheme", "", "/path", "query", "" }
     },
-    { "scheme:///path?query#fragment",
+    { eggs::uri("scheme:///path?query#fragment"),
         { "scheme", "", "/path", "query", "fragment" }
     },
-    { "scheme://authority",
+    { eggs::uri("scheme://authority"),
         { "scheme", "authority", "", nullptr, nullptr }
     },
-    { "scheme://authority#",
+    { eggs::uri("scheme://authority#"),
         { "scheme", "authority", "", nullptr, "" }
     },
-    { "scheme://authority#fragment",
+    { eggs::uri("scheme://authority#fragment"),
         { "scheme", "authority", "", nullptr, "fragment" }
     },
-    { "scheme://authority?",
+    { eggs::uri("scheme://authority?"),
         { "scheme", "authority", "", "", nullptr }
     },
-    { "scheme://authority?#",
+    { eggs::uri("scheme://authority?#"),
         { "scheme", "authority", "", "", "" }
     },
-    { "scheme://authority?#fragment",
+    { eggs::uri("scheme://authority?#fragment"),
         { "scheme", "authority", "", "", "fragment" }
     },
-    { "scheme://authority?query",
+    { eggs::uri("scheme://authority?query"),
         { "scheme", "authority", "", "query", nullptr }
     },
-    { "scheme://authority?query#",
+    { eggs::uri("scheme://authority?query#"),
         { "scheme", "authority", "", "query", "" }
     },
-    { "scheme://authority?query#fragment",
+    { eggs::uri("scheme://authority?query#fragment"),
         { "scheme", "authority", "", "query", "fragment" }
     },
-    { "scheme://authority/path",
+    { eggs::uri("scheme://authority/path"),
         { "scheme", "authority", "/path", nullptr, nullptr }
     },
-    { "scheme://authority/path#",
+    { eggs::uri("scheme://authority/path#"),
         { "scheme", "authority", "/path", nullptr, "" }
     },
-    { "scheme://authority/path#fragment",
+    { eggs::uri("scheme://authority/path#fragment"),
         { "scheme", "authority", "/path", nullptr, "fragment" }
     },
-    { "scheme://authority/path?",
+    { eggs::uri("scheme://authority/path?"),
         { "scheme", "authority", "/path", "", nullptr }
     },
-    { "scheme://authority/path?#",
+    { eggs::uri("scheme://authority/path?#"),
         { "scheme", "authority", "/path", "", "" }
     },
-    { "scheme://authority/path?#fragment",
+    { eggs::uri("scheme://authority/path?#fragment"),
         { "scheme", "authority", "/path", "", "fragment" }
     },
-    { "scheme://authority/path?query",
+    { eggs::uri("scheme://authority/path?query"),
         { "scheme", "authority", "/path", "query", nullptr }
     },
-    { "scheme://authority/path?query#",
+    { eggs::uri("scheme://authority/path?query#"),
         { "scheme", "authority", "/path", "query", "" }
     },
-    { "scheme://authority/path?query#fragment",
+    { eggs::uri("scheme://authority/path?query#fragment"),
         { "scheme", "authority", "/path", "query", "fragment" }
     },
 };
+
+#endif /*EGGS_URIS_TEST_URI_WITH_PARTS_HPP*/

@@ -9,7 +9,7 @@
 
 /// constexpr support
 #ifndef EGGS_CXX11_HAS_CONSTEXPR
-#  if defined(_MSC_FULL_VER)
+#  if defined(_MSC_FULL_VER) && _MSC_FULL_VER < 190000000
 #    define EGGS_CXX11_HAS_CONSTEXPR 0
 #  else
 #    define EGGS_CXX11_HAS_CONSTEXPR 1
@@ -18,7 +18,7 @@
 #endif
 
 #ifndef EGGS_CXX11_CONSTEXPR
-#  if defined(_MSC_FULL_VER)
+#  if defined(_MSC_FULL_VER) && _MSC_FULL_VER < 190000000
 #    define EGGS_CXX11_CONSTEXPR
 #  else
 #    define EGGS_CXX11_CONSTEXPR constexpr
@@ -27,7 +27,7 @@
 #endif
 
 #ifndef EGGS_CXX11_STATIC_CONSTEXPR
-#  if defined(_MSC_FULL_VER)
+#  if defined(_MSC_FULL_VER) && _MSC_FULL_VER < 190000000
 #    define EGGS_CXX11_STATIC_CONSTEXPR static const
 #  else
 #    define EGGS_CXX11_STATIC_CONSTEXPR static constexpr

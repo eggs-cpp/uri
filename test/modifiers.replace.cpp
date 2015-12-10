@@ -17,39 +17,55 @@ TEST_CASE("uri::replace_xxx()", "[uri.modifiers]")
 {
     for (UriWithParts const& test : uri_tests)
     {
-        eggs::uri uri(test.uri);
+        INFO("uri := " << test.uri.string());
 
-        SECTION("scheme")
+        // scheme
         {
+            eggs::uri uri = test.uri;
+
             uri.replace_scheme("replacement");
 
             CHECK(uri.has_scheme() == true);
+            CHECK(uri.scheme() == "replacement");
         }
 
-        SECTION("authority")
+        // authority
         {
+            eggs::uri uri = test.uri;
+
             uri.replace_authority("replacement");
 
             CHECK(uri.has_authority() == true);
+            CHECK(uri.authority() == "replacement");
         }
 
-        SECTION("path")
+        // path
         {
+            eggs::uri uri = test.uri;
+
             uri.replace_path("/replacement");
+
+            CHECK(uri.path() == "/replacement");
         }
 
-        SECTION("query")
+        // query
         {
+            eggs::uri uri = test.uri;
+
             uri.replace_query("replacement");
 
             CHECK(uri.has_query() == true);
+            CHECK(uri.query() == "replacement");
         }
 
-        SECTION("fragment")
+        // fragment
         {
+            eggs::uri uri = test.uri;
+
             uri.replace_fragment("replacement");
 
             CHECK(uri.has_fragment() == true);
+            CHECK(uri.fragment() == "replacement");
         }
     }
 }

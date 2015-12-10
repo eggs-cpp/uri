@@ -8,8 +8,10 @@
 #ifndef EGGS_URI_URI_HPP
 #define EGGS_URI_URI_HPP
 
+#include <eggs/uri/detail/grammar.hpp>
 #include <eggs/uri/experimental/string_view.hpp>
 
+#include <cassert>
 #include <cstddef>
 #include <string>
 #include <utility>
@@ -29,6 +31,25 @@ namespace eggs { namespace uris
             query = 4,
             fragment = 5
         };
+
+        ///////////////////////////////////////////////////////////////////////
+        EGGS_CXX14_CONSTEXPR inline bool valid(
+            uri_part part, experimental::string_view source) EGGS_CXX11_NOEXCEPT
+        {
+            switch (part) {
+            case uri_part::scheme:
+                return valid_scheme(source.begin(), source.end());
+            case uri_part::authority:
+                return valid_authority(source.begin(), source.end());
+            case uri_part::path:
+                return valid_path(source.begin(), source.end());
+            case uri_part::query:
+                return valid_query(source.begin(), source.end());
+            case uri_part::fragment:
+                return valid_fragment(source.begin(), source.end());
+            }
+            return assert(false), false;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -116,7 +137,7 @@ namespace eggs { namespace uris
         //! \effects Constructs an object of type `uri` from `source`.
         explicit uri(std::string source)
         {
-            assign(std::move(source));
+            _build(std::move(source));
         }
 
         //! template <class InputIterator>
@@ -129,7 +150,7 @@ namespace eggs { namespace uris
         template <typename InputIterator>
         uri(InputIterator first, InputIterator last)
         {
-            assign(first, last);
+            _build(std::string(first, last));
         }
 
         //! uri& operator=(uri const& other)
@@ -166,7 +187,7 @@ namespace eggs { namespace uris
         //! \returns `*this`.
         uri& operator=(std::string source) EGGS_CXX11_NOEXCEPT
         {
-            assign(std::move(source));
+            _build(std::move(source));
             return *this;
         }
 
@@ -177,38 +198,7 @@ namespace eggs { namespace uris
         //! \effects Replaces the value of `*this` with `source`.
         void assign(std::string source)
         {
-            _value = std::move(source);
-            if (!_value.empty()) {
-                _scheme_end = _value.find_first_of(':');
-                if (_scheme_end == std::string::npos) {
-                    _scheme_end = 0;
-                } else {
-                    ++_scheme_end;
-                }
-
-                if (_scheme_end + 2 <= _value.size()
-                 && _value[_scheme_end + 0] == '/'
-                 && _value[_scheme_end + 1] == '/') {
-                    _authority_end = _value.find_first_of("/?#", _scheme_end + 2);
-                    if (_authority_end == std::string::npos) {
-                        _authority_end = _value.size();
-                    }
-                } else {
-                    _authority_end = _scheme_end;
-                }
-
-                _path_end = _value.find_first_of("?#", _authority_end);
-                if (_path_end == std::string::npos) {
-                    _path_end = _value.size();
-                }
-
-                _query_end = _value.find_first_of('#', _path_end);
-                if (_query_end == std::string::npos) {
-                    _query_end = _value.size();
-                }
-            } else {
-                _scheme_end = _authority_end = _path_end = _query_end = 0;
-            }
+            _build(std::move(source));
         }
 
         //! template <class InputIterator>
@@ -221,7 +211,7 @@ namespace eggs { namespace uris
         template <typename InputIterator>
         void assign(InputIterator first, InputIterator last)
         {
-            return assign(std::string(first, last));
+            _build(std::string(first, last));
         }
 
         //! void clear() noexcept
@@ -270,6 +260,7 @@ namespace eggs { namespace uris
         //! \postconditions `has_scheme()`.
         void replace_scheme(experimental::string_view scheme)
         {
+            assert(detail::valid(detail::uri_part::scheme, scheme));
             _resize(detail::uri_part::scheme, scheme.size() + 1, ':');
             _value.replace(0, scheme.size(),
                 scheme.data(), scheme.size());
@@ -323,6 +314,7 @@ namespace eggs { namespace uris
         //! \postconditions `has_authority()`.
         void replace_authority(experimental::string_view authority)
         {
+            assert(detail::valid(detail::uri_part::authority, authority));
             _resize(detail::uri_part::authority, 2 + authority.size(), '/');
             _value.replace(_scheme_end + 2, authority.size(),
                 authority.data(), authority.size());
@@ -353,6 +345,7 @@ namespace eggs { namespace uris
         //! \effects Replaces the path component with the given one.
         void replace_path(experimental::string_view path)
         {
+            assert(detail::valid(detail::uri_part::path, path));
             _resize(detail::uri_part::path, path.size());
             _value.replace(_authority_end, path.size(),
                 path.data(), path.size());
@@ -395,6 +388,7 @@ namespace eggs { namespace uris
         //! \postconditions `has_query()`.
         void replace_query(experimental::string_view query)
         {
+            assert(detail::valid(detail::uri_part::query, query));
             _resize(detail::uri_part::query, 1 + query.size(), '?');
             _value.replace(_path_end + 1, query.size(),
                 query.data(), query.size());
@@ -437,6 +431,7 @@ namespace eggs { namespace uris
         //! \postconditions `has_fragment()`.
         void replace_fragment(experimental::string_view fragment)
         {
+            assert(detail::valid(detail::uri_part::fragment, fragment));
             _resize(detail::uri_part::fragment, 1 + fragment.size(), '#');
             _value.replace(_query_end + 1, fragment.size(),
                 fragment.data(), fragment.size());
@@ -472,6 +467,55 @@ namespace eggs { namespace uris
         }
 
     private:
+        void _build(std::string&& source, bool checked = true) noexcept
+        {
+            _value = std::move(source);
+            if (!_value.empty()) {
+                _scheme_end = _value.find_first_of(':');
+                if (_scheme_end == std::string::npos) {
+                    _scheme_end = 0;
+                } else {
+                    ++_scheme_end;
+                    assert(!checked
+                     || detail::valid(detail::uri_part::scheme, scheme()));
+                }
+
+                if (_scheme_end + 2 <= _value.size()
+                 && _value[_scheme_end + 0] == '/'
+                 && _value[_scheme_end + 1] == '/') {
+                    _authority_end = _value.find_first_of("/?#", _scheme_end + 2);
+                    if (_authority_end == std::string::npos) {
+                        _authority_end = _value.size();
+                    }
+                    assert(!checked
+                     || detail::valid(detail::uri_part::authority, authority()));
+                } else {
+                    _authority_end = _scheme_end;
+                }
+
+                _path_end = _value.find_first_of("?#", _authority_end);
+                if (_path_end == std::string::npos) {
+                    _path_end = _value.size();
+                }
+                assert(!checked
+                 || detail::valid(detail::uri_part::path, path()));
+
+                _query_end = _value.find_first_of('#', _path_end);
+                if (_query_end == std::string::npos) {
+                    _query_end = _value.size();
+                }
+                assert(!checked
+                 || detail::valid(detail::uri_part::query, query()));
+
+                assert(!checked
+                 || detail::valid(detail::uri_part::fragment, fragment()));
+            } else {
+                _scheme_end = _authority_end = _path_end = _query_end = 0;
+            }
+
+            (void)checked;
+        }
+
         experimental::string_view _substr(
             std::size_t begin, std::size_t end) const EGGS_CXX11_NOEXCEPT
         {
